@@ -13,7 +13,7 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
     );
-    Logger.log(`Server started at http://localhost:${port}`, "BOOTSTRAP");
     await app.listen(5000);
+    Logger.debug(`Server started at http://localhost:${port}`, "BOOTSTRAP");
 }
 bootstrap();
