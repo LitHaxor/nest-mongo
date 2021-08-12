@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { Types } from "mongoose";
 import { LoginDto, RegisterDto } from "../dtos/AuthUser.dto";
 import { AuthService } from "../services/auth.service";
@@ -10,7 +11,9 @@ export class UserController {
         private readonly userService: UserService,
         private readonly authService: AuthService,
     ) {}
+
     @Get()
+    @UseGuards(AuthGuard("jwt"))
     getAllUser() {
         return this.userService.getAllUser();
     }
@@ -20,12 +23,25 @@ export class UserController {
     }
 
     @Post("/login")
-    loginUser(@Body() loginUserDto: LoginDto) {
-        return this.authService.loginUser(loginUserDto);
+    async loginUser(@Body() loginUserDto: LoginDto) {
+        const user = await this.authService.loginUser(loginUserDto);
+        const payload = {
+            username: user.username,
+            seller: user.seller,
+        };
+
+        const token = await this.authService.signPayload(payload);
+        return { user, token };
     }
 
     @Post("/register")
-    registerUser(@Body() registerDto: RegisterDto) {
-        return this.authService.registerUser(registerDto);
+    async registerUser(@Body() registerDto: RegisterDto) {
+        const user = await this.userService.createUser(registerDto);
+        const payload = {
+            username: user.username,
+            seller: user.seller,
+        };
+        const token = await this.authService.signPayload(payload);
+        return { user, token };
     }
 }

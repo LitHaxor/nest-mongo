@@ -6,6 +6,7 @@ import { User, UserSchema } from "./models/user.schema";
 import { UserService } from "./services/user.service";
 import { AuthService } from "./services/auth.service";
 import bcrypt from "bcryptjs";
+import { JwtStrategy } from "./jwt.strategy";
 @Module({
     imports: [
         MongooseModule.forFeatureAsync([
@@ -37,6 +38,6 @@ import bcrypt from "bcryptjs";
         ]),
     ],
     controllers: [UserController],
-    providers: [UserService, AuthService],
+    providers: [AuthService, UserService, JwtStrategy],
 })
 export class UserModule {}

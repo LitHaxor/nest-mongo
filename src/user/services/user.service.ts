@@ -10,8 +10,8 @@ export class UserService {
         @InjectModel(User.name) private readonly userModel: Model<User>,
     ) {}
 
-    private santitizeUser(user: User) {
-        return user.depopulate("password");
+    private santitizeUser({ username, seller, id, created, __v }: User) {
+        return { username, seller, id, created, __v };
     }
 
     async getAllUser() {
@@ -44,7 +44,6 @@ export class UserService {
         if (!user) {
             throw new HttpException("User not found!", HttpStatus.UNAUTHORIZED);
         }
-
         if (await bcrypt.compare(password, user.password)) {
             return this.santitizeUser(user);
         } else {
@@ -52,6 +51,15 @@ export class UserService {
                 "Invalid credential",
                 HttpStatus.UNAUTHORIZED,
             );
+        }
+    }
+
+    async findByPayload(payload: any) {
+        try {
+            const { username } = payload;
+            return await this.userModel.findOne({ username });
+        } catch (error) {
+            throw new HttpException("Wrong token!", HttpStatus.FORBIDDEN);
         }
     }
 }
