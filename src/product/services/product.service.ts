@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { IUserInfo } from "src/user/decorator/user.decorator";
 import { User } from "src/user/models/user.schema";
-import { UserService } from "src/user/services/user.service";
 import { CreateProductDto } from "../dtos/createProduct.dto";
 import { UpdateProductDto } from "../dtos/updateProduct.dto";
 import { Product } from "../models/product.schema";
@@ -15,11 +14,13 @@ export class ProductServices {
     ) {}
 
     async listAllProducts() {
-        return await this.productModel.find().populate("owner");
+        return await this.productModel.find().populate("owner", "-password");
     }
 
     async listOneProduct(_id: Types.ObjectId) {
-        return await this.productModel.findById(_id).populate("owner");
+        return await this.productModel
+            .findById(_id)
+            .populate("owner", "-password");
     }
 
     async createProduct(
@@ -43,13 +44,15 @@ export class ProductServices {
         updateProductDto: UpdateProductDto,
         userInfo: User,
     ) {
-        return await this.productModel.findOneAndUpdate(
-            {
-                owner: userInfo,
-                _id: _id,
-            },
-            updateProductDto,
-        );
+        return await this.productModel
+            .findOneAndUpdate(
+                {
+                    owner: userInfo,
+                    _id: _id,
+                },
+                updateProductDto,
+            )
+            .populate("owner", "-password");
     }
     async deleteOneProduct(_id: Types.ObjectId) {
         return await this.productModel.findOneAndDelete(_id);

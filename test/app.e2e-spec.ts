@@ -28,7 +28,7 @@ describe("ROOT", () => {
 describe("AUTH", () => {
     it("/user/register POST (Register user)", () => {
         const user: RegisterDto = {
-            username: "username2",
+            username: "username",
             password: "password",
             seller: false,
         };
@@ -37,7 +37,6 @@ describe("AUTH", () => {
             .set("Accept", "application/json")
             .send(user)
             .expect(({ body }) => {
-                console.log(body);
                 expect(body.token).toBeDefined();
                 expect(body.user.username).toEqual("username");
                 expect(body.user.password).toBeUndefined();

@@ -10,8 +10,8 @@ export class UserService {
         @InjectModel(User.name) private readonly userModel: Model<User>,
     ) {}
 
-    private santitizeUser({ username, seller, id, created, __v }: User) {
-        return { username, seller, id, created, __v };
+    private santitizeUser({ username, seller, id, created }: User) {
+        return { username, seller, id, created };
     }
 
     async getAllUser() {
@@ -20,7 +20,7 @@ export class UserService {
     }
 
     async getOneUser(_id: Types.ObjectId) {
-        return (await this.userModel.findById(_id)).depopulate("password");
+        return this.santitizeUser(await this.userModel.findById(_id));
     }
 
     async createUser(createUserDto: RegisterDto) {
