@@ -26,6 +26,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
                     : "Something went wrong",
         };
 
-        return response.status(status).json(errorResponse);
+        return response.status(status).send(errorResponse);
     }
 }

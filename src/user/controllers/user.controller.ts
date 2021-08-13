@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Types } from "mongoose";
+import { UserInfo } from "../decorator/user.decorator";
 import { LoginDto, RegisterDto } from "../dtos/AuthUser.dto";
+import { Payload } from "../interfaces/payload";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 
@@ -14,7 +16,8 @@ export class UserController {
 
     @Get()
     @UseGuards(AuthGuard("jwt"))
-    getAllUser() {
+    getAllUser(@UserInfo() user: any) {
+        console.log(user);
         return this.userService.getAllUser();
     }
     @Get(":id")
@@ -25,7 +28,7 @@ export class UserController {
     @Post("/login")
     async loginUser(@Body() loginUserDto: LoginDto) {
         const user = await this.authService.loginUser(loginUserDto);
-        const payload = {
+        const payload: Payload = {
             username: user.username,
             seller: user.seller,
         };

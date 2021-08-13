@@ -3,7 +3,9 @@ import { AppController } from "./app.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
-import { UserModule } from "src/user/user.module";
+import { UserModule } from "../user/user.module";
+import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
+import { HttpExceptionFilter } from "../utils/filters/http-exeception.filter";
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -13,6 +15,12 @@ import { UserModule } from "src/user/user.module";
         UserModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
+    ],
 })
 export class AppModule {}
