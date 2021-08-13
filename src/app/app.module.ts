@@ -6,6 +6,7 @@ import { ConfigModule } from "@nestjs/config";
 import { UserModule } from "../user/user.module";
 import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { HttpExceptionFilter } from "../utils/filters/http-exeception.filter";
+import { LogginInterceptor } from "src/utils/interceptors/Loggin.interceptor";
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -20,6 +21,10 @@ import { HttpExceptionFilter } from "../utils/filters/http-exeception.filter";
         {
             provide: APP_FILTER,
             useClass: HttpExceptionFilter,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: LogginInterceptor,
         },
     ],
 })

@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Req,
+    UseGuards,
+} from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Types } from "mongoose";
 import { UserInfo } from "../decorator/user.decorator";
 import { LoginDto, RegisterDto } from "../dtos/AuthUser.dto";
+import { SellerGurd } from "../gurds/seller.guard";
 import { Payload } from "../interfaces/payload";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
@@ -15,9 +24,8 @@ export class UserController {
     ) {}
 
     @Get()
-    @UseGuards(AuthGuard("jwt"))
-    getAllUser(@UserInfo() user: any) {
-        console.log(user);
+    @UseGuards(AuthGuard("jwt"), SellerGurd)
+    getAllUser(@UserInfo() userInfo: any) {
         return this.userService.getAllUser();
     }
     @Get(":id")

@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 const app = "http://localhost:5000";
 
 beforeAll(async () => {
-    await mongoose.connect(process.env.mongoURI, {
+    await mongoose.connect(process.env.mongoTEST, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
@@ -28,7 +28,7 @@ describe("ROOT", () => {
 describe("AUTH", () => {
     it("/user/register POST (Register user)", () => {
         const user: RegisterDto = {
-            username: "username",
+            username: "username2",
             password: "password",
             seller: false,
         };
@@ -37,6 +37,7 @@ describe("AUTH", () => {
             .set("Accept", "application/json")
             .send(user)
             .expect(({ body }) => {
+                console.log(body);
                 expect(body.token).toBeDefined();
                 expect(body.user.username).toEqual("username");
                 expect(body.user.password).toBeUndefined();

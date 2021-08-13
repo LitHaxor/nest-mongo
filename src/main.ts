@@ -8,6 +8,14 @@ import { AppModule } from "./app/app.module";
 
 const port = process.env.PORT || 5000;
 
+if (process.env.NODE_ENV === "test") {
+    process.env.mongoURI = process.env.mongoTEST;
+    Logger.debug(
+        `Initiated Test Session on Test Database ${process.env.mongoURI}`,
+        "MONGODB",
+    );
+}
+
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
         AppModule,
