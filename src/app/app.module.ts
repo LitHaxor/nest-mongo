@@ -6,14 +6,18 @@ import { ConfigModule } from "@nestjs/config";
 import { UserModule } from "../user/user.module";
 import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { HttpExceptionFilter } from "../utils/filters/http-exeception.filter";
-import { LogginInterceptor } from "src/utils/interceptors/Loggin.interceptor";
+import { LogginInterceptor } from "../utils/interceptors/Loggin.interceptor";
+import { ProductModule } from "../product/product.module";
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        MongooseModule.forRoot(process.env.mongoURI),
+        MongooseModule.forRoot(process.env.mongoURI, {
+            useFindAndModify: false,
+        }),
         UserModule,
+        ProductModule,
     ],
     controllers: [AppController],
     providers: [

@@ -26,6 +26,7 @@ export class UserController {
     @Get()
     @UseGuards(AuthGuard("jwt"), SellerGurd)
     getAllUser(@UserInfo() userInfo: any) {
+        console.log(userInfo);
         return this.userService.getAllUser();
     }
     @Get(":id")
