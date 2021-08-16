@@ -20,6 +20,8 @@ import { ProductModule } from "../product/product.module";
                 : process.env.mongoURI,
             {
                 useFindAndModify: false,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
             },
         ),
         UserModule,

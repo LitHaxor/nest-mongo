@@ -19,7 +19,7 @@ export class UserService {
         return user.map((e) => this.santitizeUser(e));
     }
 
-    async getOneUser(_id: Types.ObjectId) {
+    async getOneUser(_id: string) {
         return this.santitizeUser(await this.userModel.findById(_id));
     }
 

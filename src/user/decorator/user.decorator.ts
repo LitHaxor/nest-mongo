@@ -10,9 +10,9 @@ export interface IUserInfo {
 export const UserInfo = createParamDecorator(
     (data: string, ctx: ExecutionContext) => {
         const request = ctx.switchToHttp().getRequest();
-        const user: IUserInfo = request.user;
-        if (user) {
-            return user;
+        const { username, created, seller, _id }: IUserInfo = request.user;
+        if (request.user) {
+            return { username, created, seller, _id };
         } else return null;
     },
 );

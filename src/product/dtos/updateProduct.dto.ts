@@ -1,6 +1,10 @@
-export class UpdateProductDto {
-    title?: string;
-    image?: ImageBitmap;
-    description?: string[];
-    number?: number;
-}
+// export class UpdateProductDto {
+//     title?: string;
+//     image?: string;
+//     description?: string[];
+//     price?: number;
+// }
+
+import { CreateProductDto } from "./createProduct.dto";
+import { PartialType } from "@nestjs/mapped-types";
+export class UpdateProductDto extends PartialType(CreateProductDto) {}

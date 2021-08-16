@@ -1,4 +1,10 @@
-import { Injectable, UseGuards } from "@nestjs/common";
+import {
+    HttpException,
+    HttpStatus,
+    Injectable,
+    Logger,
+    UseGuards,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { IUserInfo } from "src/user/decorator/user.decorator";
@@ -17,7 +23,7 @@ export class ProductServices {
         return await this.productModel.find().populate("owner", "-password");
     }
 
-    async listOneProduct(_id: Types.ObjectId) {
+    async listOneProduct(_id: string) {
         return await this.productModel
             .findById(_id)
             .populate("owner", "-password");
@@ -33,28 +39,32 @@ export class ProductServices {
                 owner: userInfo,
             });
             await product.save();
-            return product;
+            return product.populate("owner", "-password");
         } catch (error) {
             console.log(error);
         }
     }
 
     async updateOneProduct(
-        _id: Types.ObjectId,
+        _id: string,
         updateProductDto: UpdateProductDto,
         userInfo: User,
     ) {
-        return await this.productModel
-            .findOneAndUpdate(
-                {
-                    owner: userInfo,
-                    _id: _id,
-                },
-                updateProductDto,
-            )
-            .populate("owner", "-password");
+        const productToFind = await this.productModel.findOne({
+            owner: userInfo,
+            _id: _id,
+        });
+        if (!productToFind)
+            throw new HttpException("Product Not found", HttpStatus.NOT_FOUND);
+        return await this.productModel.findOneAndUpdate(
+            { _id: productToFind._id },
+            updateProductDto,
+            {
+                returnDocument: "after",
+            },
+        );
     }
-    async deleteOneProduct(_id: Types.ObjectId) {
-        return await this.productModel.findOneAndDelete(_id);
+    async deleteOneProduct(_id: string) {
+        return await this.productModel.findByIdAndDelete(_id);
     }
 }

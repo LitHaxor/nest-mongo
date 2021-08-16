@@ -30,7 +30,7 @@ export class UserController {
         return this.userService.getAllUser();
     }
     @Get(":id")
-    getOneUser(@Param("id") _id: Types.ObjectId) {
+    getOneUser(@Param("id") _id: string) {
         return this.userService.getOneUser(_id);
     }
 

@@ -1,14 +1,11 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { LoginDto, RegisterDto } from "../src/user/dtos/AuthUser.dto";
 import request from "supertest";
 import { HttpStatus } from "@nestjs/common";
 import mongoose from "mongoose";
-
-const app = "http://localhost:5000";
+import { app, db } from "./constants";
 
 beforeAll(async () => {
-    await mongoose.connect(process.env.mongoTEST, {
+    await mongoose.connect(db, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

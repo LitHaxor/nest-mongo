@@ -16,7 +16,10 @@ export class Product {
     description: string[];
 
     @Prop()
-    price: string;
+    price: number;
+
+    @Prop()
+    image: string;
 
     @Prop({ type: Date, default: Date.now })
     createdAt: Date;
