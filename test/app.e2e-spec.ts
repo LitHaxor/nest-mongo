@@ -16,12 +16,6 @@ afterAll((done) => {
     return mongoose.disconnect(done);
 });
 
-describe("ROOT", () => {
-    it("/ GET", () => {
-        return request(app).get("/").expect(200).expect("Hello World!");
-    });
-});
-
 describe("AUTH", () => {
     it("/user/register POST (Register user)", () => {
         const user: RegisterDto = {

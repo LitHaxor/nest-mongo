@@ -1,4 +1,4 @@
-import { Logger, ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
     FastifyAdapter,
@@ -21,6 +21,9 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
     );
+    app.enableVersioning({
+        type: VersioningType.URI,
+    });
     const config = new DocumentBuilder()
         .addBearerAuth()
         .setTitle("E commerce example")

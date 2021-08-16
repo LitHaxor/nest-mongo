@@ -8,7 +8,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Types } from "mongoose";
+import { ApiTags } from "@nestjs/swagger";
 import { UserInfo } from "../decorator/user.decorator";
 import { LoginDto, RegisterDto } from "../dtos/AuthUser.dto";
 import { SellerGurd } from "../gurds/seller.guard";
@@ -16,7 +16,11 @@ import { Payload } from "../interfaces/payload";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 
-@Controller("user")
+@ApiTags("user")
+@Controller({
+    path: "user",
+    version: "1",
+})
 export class UserController {
     constructor(
         private readonly userService: UserService,

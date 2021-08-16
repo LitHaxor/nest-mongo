@@ -21,7 +21,10 @@ import { ProductServices } from "../services/product.service";
 
 @ApiBearerAuth()
 @ApiTags("Product")
-@Controller("product")
+@Controller({
+    version: "1",
+    path: "product",
+})
 export class ProductController {
     constructor(private productService: ProductServices) {}
 
